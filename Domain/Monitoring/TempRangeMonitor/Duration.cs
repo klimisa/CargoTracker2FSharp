@@ -20,7 +20,7 @@ namespace Domain.Monitoring.TempRangeMonitor
 
         public bool GreaterThan(Duration duration)
         {
-            return this.Value.TotalSeconds > duration.Value.TotalSeconds;
+            return Value.TotalSeconds > duration.Value.TotalSeconds;
         }
     }
 }

@@ -2,25 +2,18 @@
 
 namespace Domain.Shipping.Cargo
 {
-    public class TrackingId 
+    public class TrackingId
     {
-
-        public TrackingId(System.Guid value)
+        public TrackingId(Guid value)
         {
             Value = value;
         }
 
         public TrackingId()
         {
-            Value = System.Guid.NewGuid();
+            Value = Guid.NewGuid();
         }
 
-        public Guid Value
-        {
-            get;
-            private set;
-        }
-
-
+        public Guid Value { get; }
     }
 }

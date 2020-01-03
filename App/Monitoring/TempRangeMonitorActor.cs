@@ -23,7 +23,7 @@ namespace App.Monitoring
 
         public string ContainerId { get; }
 
-        public TempRangeMonitorActor(Domain.Monitoring.TempRangeMonitor.IRepo tempRangeMonitorRepo
+        public TempRangeMonitorActor(IRepo tempRangeMonitorRepo
             , IEventDispatcher eventDispatcher
             , string containerId)
         {
@@ -64,7 +64,7 @@ namespace App.Monitoring
             }
         }
 
-        public static Props Props(Domain.Monitoring.TempRangeMonitor.IRepo tempRangeMonitorRepo, IEventDispatcher eventDispatcher, string containerId)
+        public static Props Props(IRepo tempRangeMonitorRepo, IEventDispatcher eventDispatcher, string containerId)
         {
             return Akka.Actor.Props.Create(() => new TempRangeMonitorActor(tempRangeMonitorRepo, eventDispatcher, containerId));
         }

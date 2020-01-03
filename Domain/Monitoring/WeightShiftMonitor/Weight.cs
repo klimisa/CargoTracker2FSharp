@@ -15,8 +15,8 @@ namespace Domain.Monitoring.WeightShiftMonitor
 
         public PercentageOffset CalcPercDiff(Weight weight)
         {
-            var diff = Math.Abs(weight.Value - this.Value)*1.0;
-            var percDiff = diff / this.Value;
+            var diff = Math.Abs(weight.Value - Value)*1.0;
+            var percDiff = diff / Value;
 
             return new PercentageOffset( (int)(percDiff * 100)) ;
         }

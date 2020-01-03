@@ -40,7 +40,7 @@ namespace Domain.Monitoring.WeightShiftMonitor
                 {
                     AlarmStarted = true;
 
-                    this.Events.Add(new AlarmStarted(ContainerId, reading, shift.PercOfLargestShift, shift.DirOfLargestShift));
+                    Events.Add(new AlarmStarted(ContainerId, reading, shift.PercOfLargestShift, shift.DirOfLargestShift));
                 }
             }
             // less than spec perc
@@ -51,7 +51,7 @@ namespace Domain.Monitoring.WeightShiftMonitor
                 {
                     AlarmStarted = false;
 
-                    this.Events.Add(new AlarmStopped(ContainerId, reading));
+                    Events.Add(new AlarmStopped(ContainerId, reading));
                 }
             }
         }

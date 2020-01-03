@@ -47,14 +47,14 @@ namespace Domain.Monitoring.TempRangeMonitor
                 ConsecOutOfRangeReadings.Add(reading);
 
                 // start the alarm if the duration that the readings can be out of range is exceeded
-                if (ConsecOutOfRangeReadings.TotalDuration.GreaterThan(this.Specification.Duration)
+                if (ConsecOutOfRangeReadings.TotalDuration.GreaterThan(Specification.Duration)
                     &&
                     !AlarmStarted
                     )
                 {
                     AlarmStarted = true;
 
-                    this.Events.Add(new AlarmStarted(ContainerId, reading));
+                    Events.Add(new AlarmStarted(ContainerId, reading));
                 }
             }
             // in range
@@ -65,7 +65,7 @@ namespace Domain.Monitoring.TempRangeMonitor
                 {
                     AlarmStarted = false;
 
-                    this.Events.Add(new AlarmStopped(ContainerId, reading));
+                    Events.Add(new AlarmStopped(ContainerId, reading));
 
                     ConsecOutOfRangeReadings.Clear();
                 }

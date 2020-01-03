@@ -23,7 +23,7 @@ namespace Domain.Shipping.Cargo
 
             Delivery = new Delivery(RouteSpec, null, null);
 
-            this.Events.Add(new NewBooked(trackingId, routeSpec));
+            Events.Add(new NewBooked(trackingId, routeSpec));
         }
 
         // rehydration ctor
@@ -43,8 +43,8 @@ namespace Domain.Shipping.Cargo
 
             Delivery = new Delivery(RouteSpec, Itinerary, LastHandlingEvent);
 
-            this.Events.Add(new AssignedToItinerary(TrackingId, Itinerary));
-            this.Events.Add(new DeliveryStateChanged(TrackingId, Delivery));
+            Events.Add(new AssignedToItinerary(TrackingId, Itinerary));
+            Events.Add(new DeliveryStateChanged(TrackingId, Delivery));
         }
 
         public void ChangeRoute(RouteSpecification routeSpec)
@@ -53,8 +53,8 @@ namespace Domain.Shipping.Cargo
 
             Delivery = new Delivery(RouteSpec, Itinerary, LastHandlingEvent);
 
-            this.Events.Add(new RouteChanged(TrackingId, RouteSpec));
-            this.Events.Add(new DeliveryStateChanged(TrackingId, Delivery));
+            Events.Add(new RouteChanged(TrackingId, RouteSpec));
+            Events.Add(new DeliveryStateChanged(TrackingId, Delivery));
         }
 
         public void RegisterHandlingEvent(HandlingEvent @event)
@@ -63,8 +63,8 @@ namespace Domain.Shipping.Cargo
 
             Delivery = new Delivery(RouteSpec, Itinerary, LastHandlingEvent);
 
-            this.Events.Add(new HandlingEventRegistered(@event));
-            this.Events.Add(new DeliveryStateChanged(TrackingId, Delivery));
+            Events.Add(new HandlingEventRegistered(@event));
+            Events.Add(new DeliveryStateChanged(TrackingId, Delivery));
         }
 
     }

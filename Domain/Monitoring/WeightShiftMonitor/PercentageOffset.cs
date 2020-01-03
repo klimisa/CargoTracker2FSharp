@@ -13,12 +13,12 @@ namespace Domain.Monitoring.WeightShiftMonitor
 
         public bool GreaterThan(PercentageOffset perc)
         {
-            return this.Value > perc.Value;
+            return Value > perc.Value;
         }
 
         public bool GreaterThan(Percentage perc)
         {
-            return this.Value > perc.Value;
+            return Value > perc.Value;
         }
 
     }

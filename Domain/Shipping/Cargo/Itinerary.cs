@@ -87,7 +87,7 @@ namespace Domain.Shipping.Cargo
             // receive at the first leg's load location
             switch (@event.Type) { 
                 case HandlingType.Receive:
-                    return this.FirstLoadLocation.Equals(@event.Location);
+                    return FirstLoadLocation.Equals(@event.Location);
                 case HandlingType.Load:
                     foreach (var leg in Legs)
                         if (leg.LoadLocation.Equals(@event.Location))
@@ -100,7 +100,7 @@ namespace Domain.Shipping.Cargo
                     return false;
                 case HandlingType.Claim:
                 case HandlingType.Customs:
-                    return this.LastUnloadLocation.Equals(@event.Location);
+                    return LastUnloadLocation.Equals(@event.Location);
             }
 
             return false;
