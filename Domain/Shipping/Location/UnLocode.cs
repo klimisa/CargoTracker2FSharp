@@ -14,7 +14,7 @@ namespace Domain.Shipping.Location
                 throw new ArgumentNullException("value");
 
             if (!_pattern.Match(value).Success)
-                throw new ArgumentException("Provided value is not a valid UnLocode", "value");
+                throw new ArgumentException("Provided value is not a valid UnLocode", nameof(value));
 
             Value = value;
         }
