@@ -5,9 +5,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Location.fs" />
-        <Compile Include="Cargo.fs" />
         <None Include="scratchpad.fsx" />
+        <Compile Include="Shipping\Location.fs" />
+        <Compile Include="Shipping\Cargo.fs" />
     </ItemGroup>
 
 </Project>

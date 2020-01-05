@@ -20,6 +20,5 @@ namespace Domain.Shipping.Location
         }
 
         public string Value { get; }
-
     }
 }

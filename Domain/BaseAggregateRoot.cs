@@ -11,6 +11,5 @@ namespace Domain
         {
             Events = new List<IEvent>();
         }
-
     }
 }

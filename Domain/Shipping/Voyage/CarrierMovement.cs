@@ -5,13 +5,13 @@ namespace Domain.Shipping.Voyage
 {
     public class CarrierMovement
     {
-        public UnLocode DepartureLocation { get; private set; }
+        public UnLocode DepartureLocation { get; }
 
-        public UnLocode ArrivalLocation { get; private set; }
+        public UnLocode ArrivalLocation { get; }
 
-        public DateTime DepartureTime { get; private set; }
+        public DateTime DepartureTime { get; }
 
-        public DateTime ArrivalTime { get; private set; }
+        public DateTime ArrivalTime { get; }
 
         public CarrierMovement(
             UnLocode departureLocation,
