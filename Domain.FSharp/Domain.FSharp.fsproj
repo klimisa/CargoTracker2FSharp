@@ -5,7 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Domain.fs" />
+        <Compile Include="Location.fs" />
+        <Compile Include="Cargo.fs" />
         <None Include="scratchpad.fsx" />
     </ItemGroup>
 

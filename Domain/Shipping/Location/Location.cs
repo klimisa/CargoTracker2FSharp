@@ -5,7 +5,7 @@ namespace Domain.Shipping.Location
     // Root of the Location Aggregate
     public class Location
     {
-        public UnLocode UnLocode { get; private set; }
+        public UnLocode UnLocode { get; }
 
         public string Name { get; private set; }
 

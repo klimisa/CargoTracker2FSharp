@@ -23,10 +23,21 @@ type UnLocode(value: string) =
 
     member val Value = value
 
-let unlocode = "x12"
+type Location(unlocode: UnLocode, name: string) =
+
+    do
+        if String.IsNullOrWhiteSpace(name) then raise (ArgumentException("Provided name is not valid", "name"))
+
+    member val UnLocode = unlocode
+    member val Name = name
+    
+let unlocode = "xa234"
 let pattern = Regex "[a-zA-Z]{2}[a-zA-Z2-9]{3}"
 let matches = (pattern.Match unlocode).Success
 
-let u = UnLocode(null)
+let u = UnLocode(unlocode)
 
-u.Value
+let l = Location(u, "Myname")
+l.UnLocode.Value
+
+
