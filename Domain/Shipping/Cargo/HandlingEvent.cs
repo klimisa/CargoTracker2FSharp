@@ -4,8 +4,7 @@ using Domain.Shipping.Voyage;
 
 namespace Domain.Shipping.Cargo
 {
-
-    public class HandlingEvent 
+    public class HandlingEvent
     {
         public TrackingId TrackingId { get; private set; }
 
@@ -27,11 +26,10 @@ namespace Domain.Shipping.Cargo
             , DateTime completed
             , DateTime registered)
         {
-            if ((type == HandlingType.Load || type == HandlingType.Unload)
-                &&
-                (voyage == null)
-               )
+            if ((type == HandlingType.Load || type == HandlingType.Unload) && voyage == null)
+            {
                 throw new InvalidOperationException("loading/unloading events need a voyage");
+            }
 
             TrackingId = trackingId ?? throw new ArgumentNullException(nameof(trackingId));
             Location = location ?? throw new ArgumentNullException(nameof(location));
@@ -40,6 +38,5 @@ namespace Domain.Shipping.Cargo
             Completed = completed;
             Registered = registered;
         }
-
     }
 }

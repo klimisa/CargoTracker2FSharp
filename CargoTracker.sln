@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra.MongoDB", "Infra.Mong
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra.MongoDB.Tests", "Infra.MongoDB.Tests\Infra.MongoDB.Tests.csproj", "{0198C0C9-96EF-4C59-BD67-065F5D1E6367}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Domain.FSharpy", "Domain.FSharpy\Domain.FSharpy.fsproj", "{59097E59-1C74-41B7-B100-504C02C83773}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Domain.FSharp", "Domain.FSharp\Domain.FSharp.fsproj", "{59097E59-1C74-41B7-B100-504C02C83773}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
