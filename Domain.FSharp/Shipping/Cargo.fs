@@ -1,7 +1,6 @@
 namespace FSharp.Domain.Shipping.Cargo
 
 open System
-open System.Text.RegularExpressions
 
 type TrackingId(value: Guid) =
     member this.Value = value
