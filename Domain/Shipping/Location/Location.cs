@@ -7,7 +7,7 @@ namespace Domain.Shipping.Location
     {
         public UnLocode UnLocode { get; }
 
-        public string Name { get; private set; }
+        public string Name { get; }
 
         public Location(UnLocode unLocode, string name)
         {

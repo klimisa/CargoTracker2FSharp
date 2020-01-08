@@ -35,7 +35,7 @@ let unlocode = "xa234"
 let pattern = Regex "[a-zA-Z]{2}[a-zA-Z2-9]{3}"
 let matches = (pattern.Match unlocode).Success
 
-let u = UnLocode(unlocode)
+let u = UnLocode(null)
 
 let l = Location(u, "Myname")
 l.UnLocode.Value

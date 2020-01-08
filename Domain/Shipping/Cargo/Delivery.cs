@@ -6,11 +6,11 @@ namespace Domain.Shipping.Cargo
 {
     public class Delivery 
     {
-        public RouteSpecification RouteSpec { get; private set; }
+        public RouteSpecification RouteSpec { get; }
 
-        public Itinerary Itinerary { get; private set; }
+        public Itinerary Itinerary { get; }
 
-        public HandlingEvent LastHandlingEvent { get; private set; }
+        public HandlingEvent LastHandlingEvent { get; }
 
         public TransportStatus TransportStatus { get; private set; }
 

@@ -9,7 +9,7 @@ namespace Domain.Shipping.Cargo
 {
     public class Itinerary 
     {
-        public IReadOnlyCollection<Leg> Legs { get; private set; }
+        public IReadOnlyCollection<Leg> Legs { get; }
 
         public Itinerary(IList<Leg> legs)
         {
@@ -21,37 +21,13 @@ namespace Domain.Shipping.Cargo
             Legs = new ReadOnlyCollection<Leg>(legs);
         }
 
-        public UnLocode FirstLoadLocation
-        {
-            get
-            {
-                return Legs.First().LoadLocation;
-            }
-        }
+        public UnLocode FirstLoadLocation => Legs.First().LoadLocation;
 
-        public VoyageNumber FirstYoyage
-        {
-            get
-            {
-                return Legs.First().Voyage;
-            }
-        }
+        public VoyageNumber FirstYoyage => Legs.First().Voyage;
 
-        public UnLocode LastUnloadLocation
-        {
-            get
-            {
-                return Legs.Last().UnloadLocation;
-            }
-        }
+        public UnLocode LastUnloadLocation => Legs.Last().UnloadLocation;
 
-        public DateTime FinalArrivalDate
-        {
-            get
-            {
-                return Legs.Last().UnloadTime;
-            }
-        }
+        public DateTime FinalArrivalDate => Legs.Last().UnloadTime;
 
         public Leg NextOf(UnLocode location)
         {

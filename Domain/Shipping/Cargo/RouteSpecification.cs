@@ -3,7 +3,7 @@ using Domain.Shipping.Location;
 
 namespace Domain.Shipping.Cargo
 {
-    public class RouteSpecification 
+    public class RouteSpecification
     {
         public UnLocode Origin { get; private set; }
 
@@ -13,7 +13,6 @@ namespace Domain.Shipping.Cargo
 
         public RouteSpecification(UnLocode origin, UnLocode destination, DateTime arrivalDeadline)
         {
-
             Origin = origin ?? throw new ArgumentNullException(nameof(origin));
 
             Destination = destination ?? throw new ArgumentNullException(nameof(destination));
@@ -27,11 +26,8 @@ namespace Domain.Shipping.Cargo
         public bool IsSatisfiedBy(Itinerary itinerary)
         {
             return itinerary.FirstLoadLocation.Equals(Origin)
-                &&
-                itinerary.LastUnloadLocation.Equals(Destination)
-                &&
-                itinerary.FinalArrivalDate <= ArrivalDeadline;
+                   && itinerary.LastUnloadLocation.Equals(Destination)
+                   && itinerary.FinalArrivalDate <= ArrivalDeadline;
         }
-
     }
 }

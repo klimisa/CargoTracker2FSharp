@@ -6,15 +6,15 @@ namespace Domain.Shipping.Cargo
 {
     public class Leg
     {
-        public VoyageNumber Voyage { get; private set; }
+        public VoyageNumber Voyage { get; }
 
-        public UnLocode LoadLocation { get; private set; }
+        public UnLocode LoadLocation { get; }
 
-        public UnLocode UnloadLocation { get; private set; }
+        public UnLocode UnloadLocation { get; }
 
-        public DateTime LoadTime { get; private set; }
+        public DateTime LoadTime { get; }
 
-        public DateTime UnloadTime { get; private set; }
+        public DateTime UnloadTime { get; }
 
         public Leg(VoyageNumber voyage,
             UnLocode loadLocation,
@@ -34,6 +34,5 @@ namespace Domain.Shipping.Cargo
             LoadTime = loadTime;
             UnloadTime = unloadTime;
         }
-
     }
 }
