@@ -1,3 +1,6 @@
+open System.Collections.Generic
+open System.Collections.ObjectModel
+
 #r "netstandard"
 
 open System
@@ -39,5 +42,28 @@ let u = UnLocode(null)
 
 let l = Location(u, "Myname")
 l.UnLocode.Value
+
+type VoyageNumber(value: string) =
+
+    do
+        if isNull value then raise (ArgumentNullException("value"))
+
+    member val Value = value
+    
+type Leg(voyage: VoyageNumber, loadLocation: UnLocode, unloadLocation: UnLocode, loadTime: DateTime, unloadTime: DateTime) =
+
+    do
+        if loadTime >= unloadTime then raise <| ArgumentException "unloadTime should be later than loadTime"
+
+    member val VoyageNumber = voyage
+    member val LoadLocation = loadLocation
+    member val UnloadLocation = unloadLocation
+    member val LoadTime = loadTime
+    member val UnloadTime = unloadTime
+    
+type Itinerary(legs: IList<Leg>) =
+    
+    member val Legs = ReadOnlyCollection<Leg>(legs) :> IReadOnlyCollection<Leg>
+    
 
 

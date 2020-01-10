@@ -125,7 +125,7 @@ namespace Domain.Shipping.Cargo
                 // last handling event = received => next handling activity = load at itinerary's first leg unload location and voyage
                 case HandlingType.Receive:
 
-                    NextExpectedHandlingActivity = new HandlingActivity(HandlingType.Load, itinerary.FirstLoadLocation, itinerary.FirstYoyage);
+                    NextExpectedHandlingActivity = new HandlingActivity(HandlingType.Load, itinerary.FirstLoadLocation, itinerary.FirstVoyage);
 
                     return;
 

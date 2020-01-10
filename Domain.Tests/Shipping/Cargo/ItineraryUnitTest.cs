@@ -35,7 +35,7 @@ namespace Domain.Tests.Shipping.Cargo
             // ASSERT
             var firstLeg = legs.First();
             Assert.Equal(firstLeg.LoadLocation, itinerary.FirstLoadLocation);
-            Assert.Equal(firstLeg.Voyage, itinerary.FirstYoyage);
+            Assert.Equal(firstLeg.Voyage, itinerary.FirstVoyage);
 
             var lastLeg = legs.Last();
             Assert.Equal(lastLeg.UnloadLocation, itinerary.LastUnloadLocation);

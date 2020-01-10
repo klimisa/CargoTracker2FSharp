@@ -23,7 +23,7 @@ namespace Domain.Shipping.Cargo
 
         public UnLocode FirstLoadLocation => Legs.First().LoadLocation;
 
-        public VoyageNumber FirstYoyage => Legs.First().Voyage;
+        public VoyageNumber FirstVoyage => Legs.First().Voyage;
 
         public UnLocode LastUnloadLocation => Legs.Last().UnloadLocation;
 
@@ -42,7 +42,7 @@ namespace Domain.Shipping.Cargo
                         next = en.Current;
                         break;
                     }
-                    if (en.Current.LoadLocation.Equals(location) || en.Current.UnloadLocation.Equals(location))
+                    if (en.Current != null && (en.Current.LoadLocation.Equals(location) || en.Current.UnloadLocation.Equals(location)))
                         currentFound = true;
                 }
 

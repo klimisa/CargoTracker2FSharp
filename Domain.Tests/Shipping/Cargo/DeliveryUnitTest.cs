@@ -254,7 +254,7 @@ namespace Domain.Tests.Shipping.Cargo
             // ASSERT
             Assert.Equal(HandlingType.Load, sut.NextExpectedHandlingActivity.Type);
             Assert.Equal(itinerary.FirstLoadLocation, sut.NextExpectedHandlingActivity.Location);
-            Assert.Equal(itinerary.FirstYoyage, sut.NextExpectedHandlingActivity.Voyage);
+            Assert.Equal(itinerary.FirstVoyage, sut.NextExpectedHandlingActivity.Voyage);
         }
 
         [Fact]
