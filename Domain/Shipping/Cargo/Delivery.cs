@@ -181,6 +181,5 @@ namespace Domain.Shipping.Cargo
             else
                 IsMishandled = itinerary.IsExpected(@event);
         }
-
     }
 }

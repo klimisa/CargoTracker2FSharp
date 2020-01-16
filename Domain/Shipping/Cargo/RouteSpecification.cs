@@ -5,11 +5,11 @@ namespace Domain.Shipping.Cargo
 {
     public class RouteSpecification
     {
-        public UnLocode Origin { get; private set; }
+        public UnLocode Origin { get; }
 
-        public UnLocode Destination { get; private set; }
+        public UnLocode Destination { get; }
 
-        public DateTime ArrivalDeadline { get; private set; }
+        public DateTime ArrivalDeadline { get; }
 
         public RouteSpecification(UnLocode origin, UnLocode destination, DateTime arrivalDeadline)
         {
