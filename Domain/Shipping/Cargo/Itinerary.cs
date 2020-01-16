@@ -56,7 +56,7 @@ namespace Domain.Shipping.Cargo
         }
 
         public bool IsExpected(HandlingEvent @event) {
-
+            // TODO: Have a look on how to represent that as a valid state
             if (@event == null)
                 return true;
 
@@ -65,15 +65,9 @@ namespace Domain.Shipping.Cargo
                 case HandlingType.Receive:
                     return FirstLoadLocation.Equals(@event.Location);
                 case HandlingType.Load:
-                    foreach (var leg in Legs)
-                        if (leg.LoadLocation.Equals(@event.Location))
-                            return true;
-                    return false;
+                    return Legs.Any(leg => leg.LoadLocation.Equals(@event.Location));
                 case HandlingType.Unload:
-                    foreach (var leg in Legs)
-                        if (leg.UnloadLocation.Equals(@event.Location))
-                            return true;
-                    return false;
+                    return Legs.Any(leg => leg.UnloadLocation.Equals(@event.Location));
                 case HandlingType.Claim:
                 case HandlingType.Customs:
                     return LastUnloadLocation.Equals(@event.Location);
