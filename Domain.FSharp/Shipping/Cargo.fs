@@ -72,7 +72,7 @@ type Itinerary(legs: IList<Leg>) =
     member this.FinalArrivalDate = this.Legs.Last().UnloadTime
 
     member this.NextOf(location: UnLocode) =
-        // TODO: this is totally wrong, fix it.
+        // TODO: This is set to null in c#
         let mutable next = this.Legs.First()
         let mutable currentFound = false
         let mutable breakLoop = false
