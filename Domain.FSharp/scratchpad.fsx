@@ -9,7 +9,7 @@ open System.Text.RegularExpressions
 type TrackingId(value: Guid) =
     member x.Value = value
 
-let m = TrackingId(Guid.NewGuid())
+let m = TrackingId <| Guid.NewGuid ()
 
 m.Value
 
@@ -65,5 +65,4 @@ type Itinerary(legs: IList<Leg>) =
     
     member val Legs = ReadOnlyCollection<Leg>(legs) :> IReadOnlyCollection<Leg>
     
-
 
