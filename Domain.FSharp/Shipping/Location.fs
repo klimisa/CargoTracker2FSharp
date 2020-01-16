@@ -3,10 +3,12 @@ namespace FSharp.Domain.Shipping.Location
 open System
 open System.Text.RegularExpressions
 
+[<AllowNullLiteral>]
 type UnLocode(value: string) =
 
     do
         if isNull value then raise <| ArgumentNullException "value"
+
 
     do
         let pattern = Regex "[a-zA-Z]{2}[a-zA-Z2-9]{3}"
@@ -16,6 +18,9 @@ type UnLocode(value: string) =
     member val Value = value
 
 type Location(unlocode: UnLocode, name: string) =
+
+    do
+        if isNull unlocode then raise <| ArgumentNullException "Provided name is not valid"
 
     do
         if String.IsNullOrWhiteSpace(name) then raise <| ArgumentException("Provided name is not valid", "name")

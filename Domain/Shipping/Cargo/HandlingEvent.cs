@@ -6,17 +6,17 @@ namespace Domain.Shipping.Cargo
 {
     public class HandlingEvent
     {
-        public TrackingId TrackingId { get; private set; }
+        public TrackingId TrackingId { get; }
 
-        public HandlingType Type { get; private set; }
+        public HandlingType Type { get; }
 
-        public UnLocode Location { get; private set; }
+        public UnLocode Location { get; }
 
-        public VoyageNumber Voyage { get; private set; }
+        public VoyageNumber Voyage { get; }
 
-        public DateTime Completed { get; private set; }
+        public DateTime Completed { get; }
 
-        public DateTime Registered { get; private set; }
+        public DateTime Registered { get; }
 
         public HandlingEvent(
             TrackingId trackingId

@@ -16,7 +16,7 @@ type HandlingType =
 type RoutingStatus =
     | NotRouted = 0
     | Routed = 1
-    | MisRoute = 2
+    | MisRouted = 2
 
 type TransportStatus =
     | NotReceived = 0
@@ -28,7 +28,14 @@ type TransportStatus =
 type TrackingId(value: Guid) =
     member this.Value = value
 
+[<AllowNullLiteral>]
 type Leg(voyage: VoyageNumber, loadLocation: UnLocode, unloadLocation: UnLocode, loadTime: DateTime, unloadTime: DateTime) =
+
+    do
+        if isNull loadLocation then raise <| ArgumentNullException "loadLocation"
+
+    do
+        if isNull unloadLocation then raise <| ArgumentNullException "unloadLocation"
 
     do
         if loadTime >= unloadTime then raise <| ArgumentException "unloadTime should be later than loadTime"
@@ -40,6 +47,9 @@ type Leg(voyage: VoyageNumber, loadLocation: UnLocode, unloadLocation: UnLocode,
     member val UnloadTime = unloadTime
 
 type HandlingEvent(trackingId: TrackingId, type': HandlingType, location: UnLocode, voyage: VoyageNumber, completed: DateTime, registered: DateTime) =
+
+    do
+        if isNull location then raise <| ArgumentNullException "location"
 
     do
         if (type' = HandlingType.Load || type' = HandlingType.Unload) then
@@ -57,6 +67,7 @@ type HandlingActivity(type': HandlingType, location: UnLocode, voyage: VoyageNum
     member val Type = type'
     member val Voyage = voyage
 
+[<AllowNullLiteral>]
 type Itinerary(legs: IList<Leg>) =
 
     do
@@ -73,7 +84,7 @@ type Itinerary(legs: IList<Leg>) =
 
     member this.NextOf(location: UnLocode) =
         // TODO: This is set to null in c#
-        let mutable next = this.Legs.First()
+        let mutable next = null
         let mutable currentFound = false
         let mutable breakLoop = false
         let en = this.Legs.GetEnumerator()
@@ -96,6 +107,7 @@ type Itinerary(legs: IList<Leg>) =
         | _ -> false
 
 type RouteSpecification(origin: UnLocode, destination: UnLocode, arrivalDeadline: DateTime) =
+
     do
         if origin = destination then raise <| ArgumentNullException "value"
 
@@ -106,13 +118,28 @@ type RouteSpecification(origin: UnLocode, destination: UnLocode, arrivalDeadline
         itinerary.FirstLoadLocation = this.Origin && itinerary.LastUnloadLocation = this.Destination
         && itinerary.FinalArrivalDate <= this.ArrivalDeadline
 
-type Delivery(routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingEvent: HandlingType) as this =
-    let _calcTransportStatus event =
+type Delivery(routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingEvent: HandlingType) =
+
+    let _calcTransportStatus (event: HandlingType) =
         match event with
-        | HandlingType.Load ->  this.TransportStatus = TransportStatus.OnBoardVessel
+        | HandlingType.Load -> TransportStatus.OnBoardVessel
+        | HandlingType.Unload
+        | HandlingType.Receive
+        | HandlingType.Customs -> TransportStatus.InPort
+        | HandlingType.Claim -> TransportStatus.Claimed
+        | _ -> TransportStatus.NotReceived
+
+    let _calcRoutingStatus (routeSpec: RouteSpecification) (itinerary: Itinerary) =
+        if isNull itinerary then RoutingStatus.NotRouted
+        else if routeSpec.IsSatisfiedBy itinerary then RoutingStatus.Routed
+        else RoutingStatus.MisRouted
+
     member val RouteSpec = routeSpec
     member val Itinerary = itinerary
     member val LastHandlingEvent = lastHandlingEvent
-    member val TransportStatus with get(), private set()
-    
-    
+    member val TransportStatus = _calcTransportStatus lastHandlingEvent
+    member val RoutingStatus = _calcRoutingStatus routeSpec itinerary
+
+//module helloModule =
+//    let routeSpec = RouteSpecification(UnLocode "x", UnLocode "y", DateTime.UtcNow)
+//    let delivery = Delivery(routeSpec, null, HandlingType.Claim)
