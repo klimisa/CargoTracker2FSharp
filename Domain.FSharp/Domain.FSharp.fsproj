@@ -9,6 +9,7 @@
         <Compile Include="Shipping\Voyage.fs" />
         <Compile Include="Shipping\Location.fs" />
         <Compile Include="Shipping\Cargo.fs" />
+        <Compile Include="Shipping\Events.fs" />
     </ItemGroup>
 
 </Project>
