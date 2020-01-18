@@ -27,6 +27,7 @@ type TransportStatus =
     | Claimed = 3
     | Unknown = 4
 
+[<AllowNullLiteral>]
 type TrackingId(value: Guid) =
     member this.Value = value
 
@@ -49,6 +50,7 @@ type Leg(voyage: VoyageNumber, loadLocation: UnLocode, unloadLocation: UnLocode,
 type HandlingEvent(trackingId: TrackingId, type': HandlingType, location: UnLocode, voyage: VoyageNumber, completed: DateTime, registered: DateTime) =
 
     do
+        if isNull trackingId then raise <| ArgumentNullException "trackingId"
         if isNull location then raise <| ArgumentNullException "location"
         if (type' = HandlingType.Load || type' = HandlingType.Unload) && isNull voyage then
             raise <| InvalidOperationException "loading/unloading events need a voyage"
@@ -257,7 +259,8 @@ module Events =
     type NewBooked(trackingId: TrackingId, routeSpec: RouteSpecification) =
 
         do
-            if isNull routeSpec then raise <| ArgumentNullException "trackingId"
+            if isNull trackingId then raise <| ArgumentNullException "trackingId"
+            if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
 
         interface IEvent
         member val TrackingId = trackingId
@@ -266,6 +269,7 @@ module Events =
     type AssignedToItinerary(trackingId: TrackingId, itinerary: Itinerary) =
 
         do
+            if isNull trackingId then raise <| ArgumentNullException "trackingId"
             if isNull itinerary then raise <| ArgumentNullException "itinerary"
 
         interface IEvent
@@ -275,6 +279,7 @@ module Events =
     type RouteChanged(trackingId: TrackingId, routeSpec: RouteSpecification) =
 
         do
+            if isNull trackingId then raise <| ArgumentNullException "trackingId"
             if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
 
         interface IEvent
@@ -284,6 +289,7 @@ module Events =
     type DeliveryStateChanged(trackingId: TrackingId, delivery: Delivery) =
 
         do
+            if isNull trackingId then raise <| ArgumentNullException "trackingId"
             if isNull delivery then raise <| ArgumentNullException "delivery"
 
         interface IEvent
@@ -309,6 +315,7 @@ type Cargo(trackingId: TrackingId, routeSpec: RouteSpecification) =
     val mutable private _lastHandlingEvent: HandlingEvent
 
     do
+        if isNull trackingId then raise <| ArgumentNullException "trackingId"
         if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
         base.Events.Add <| Events.NewBooked(trackingId, routeSpec)
 

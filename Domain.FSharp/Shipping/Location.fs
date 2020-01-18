@@ -9,7 +9,6 @@ type UnLocode(value: string) =
     do
         if isNull value then raise <| ArgumentNullException "value"
 
-
     do
         let pattern = Regex "[a-zA-Z]{2}[a-zA-Z2-9]{3}"
         let matches = pattern.Match value
