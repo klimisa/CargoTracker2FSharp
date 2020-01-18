@@ -11,12 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Tests", "App.Tests\App.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Tests", "Domain.Tests\Domain.Tests.csproj", "{84358480-54E0-4C79-8842-CB4F92F3822D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Vessel.Monitor.Host", "App.Vessel.Monitor.Host\App.Vessel.Monitor.Host.csproj", "{287F5C25-8DA6-4DCA-9DC8-78BE3C47A0B7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra.MongoDB", "Infra.MongoDB\Infra.MongoDB.csproj", "{029C8BC3-5BF5-4148-AF49-25A7F34A618E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra.MongoDB.Tests", "Infra.MongoDB.Tests\Infra.MongoDB.Tests.csproj", "{0198C0C9-96EF-4C59-BD67-065F5D1E6367}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Domain.FSharp", "Domain.FSharp\Domain.FSharp.fsproj", "{59097E59-1C74-41B7-B100-504C02C83773}"
 EndProject
 Global
@@ -41,18 +35,6 @@ Global
 		{84358480-54E0-4C79-8842-CB4F92F3822D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84358480-54E0-4C79-8842-CB4F92F3822D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84358480-54E0-4C79-8842-CB4F92F3822D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{287F5C25-8DA6-4DCA-9DC8-78BE3C47A0B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{287F5C25-8DA6-4DCA-9DC8-78BE3C47A0B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{287F5C25-8DA6-4DCA-9DC8-78BE3C47A0B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{287F5C25-8DA6-4DCA-9DC8-78BE3C47A0B7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{029C8BC3-5BF5-4148-AF49-25A7F34A618E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{029C8BC3-5BF5-4148-AF49-25A7F34A618E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{029C8BC3-5BF5-4148-AF49-25A7F34A618E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{029C8BC3-5BF5-4148-AF49-25A7F34A618E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0198C0C9-96EF-4C59-BD67-065F5D1E6367}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0198C0C9-96EF-4C59-BD67-065F5D1E6367}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0198C0C9-96EF-4C59-BD67-065F5D1E6367}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0198C0C9-96EF-4C59-BD67-065F5D1E6367}.Release|Any CPU.Build.0 = Release|Any CPU
 		{59097E59-1C74-41B7-B100-504C02C83773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59097E59-1C74-41B7-B100-504C02C83773}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59097E59-1C74-41B7-B100-504C02C83773}.Release|Any CPU.ActiveCfg = Release|Any CPU

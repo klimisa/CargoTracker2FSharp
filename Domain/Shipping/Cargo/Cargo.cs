@@ -66,6 +66,5 @@ namespace Domain.Shipping.Cargo
             Events.Add(new HandlingEventRegistered(@event));
             Events.Add(new DeliveryStateChanged(TrackingId, Delivery));
         }
-
     }
 }

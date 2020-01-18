@@ -249,14 +249,63 @@ type Delivery(routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingE
         if isNull event || isNull itinerary then this.IsMishandled <- false
         else this.IsMishandled <- itinerary.IsExpected event
 
+[<AllowNullLiteral>]
 type Cargo(trackingId: TrackingId, routeSpec: RouteSpecification) =
+    [<DefaultValue>]
+    val mutable private _itinerary: Itinerary
+
+    [<DefaultValue>]
+    val mutable private _lastHandlingEvent: HandlingEvent
 
     do
         if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
 
-    member val TrackingId = trackingId
-    member val RouteSpec = routeSpec
-    member val Delivery = Delivery(routeSpec, null, null)
-    
-    new (trackingId: TrackingId , routeSpec: RouteSpecification , itinerary:Itinerary , lastHandlingEvent: HandlingEvent ) as self =
-        self.TrackingId = trackingId
+    let mutable _trackingId: TrackingId = trackingId
+    let mutable _routeSpec: RouteSpecification = routeSpec
+    let mutable _delivery: Delivery = Delivery(routeSpec, null, null)
+
+    // rehydration ctor
+    new(trackingId: TrackingId, routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingEvent: HandlingEvent) as self =
+        Cargo(trackingId, routeSpec, itinerary, lastHandlingEvent)
+        then
+            self.TrackingId <- trackingId
+            self.RouteSpec <- routeSpec
+            self.Itinerary <- itinerary
+            self.LastHandlingEvent <- lastHandlingEvent
+            self.Delivery <- Delivery(routeSpec, itinerary, lastHandlingEvent)
+
+    member this.TrackingId
+        with get () = _trackingId
+        and private set (value) = _trackingId <- value
+
+    member this.RouteSpec
+        with get () = _routeSpec
+        and private set (value) = _routeSpec <- value
+
+    member this.Delivery
+        with get () = _delivery
+        and private set (value) = _delivery <- value
+
+    member this.Itinerary
+        with get () = this._itinerary
+        and private set (value) = this._itinerary <- value
+
+    member this.LastHandlingEvent
+        with get () = this._lastHandlingEvent
+        and private set (value) = this._lastHandlingEvent <- value
+
+    member this.AssignToItinerary(itinerary: Itinerary) =
+        if isNull itinerary then raise <| ArgumentNullException "itinerary"
+        this.Itinerary <- itinerary
+        this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
+    // TODO: add events
+    member this.ChangeRoute(routeSpec: RouteSpecification) =
+        if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
+        this.RouteSpec <- routeSpec
+        this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
+    // TODO: add events
+    member this.RegisterHandlingEvent(event: HandlingEvent) =
+        if isNull event then raise <| ArgumentNullException "event"
+        this.LastHandlingEvent <- event
+        this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
+// TODO: add events
