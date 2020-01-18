@@ -1,4 +1,4 @@
-namespace FSharp.Domain.Shipping.Location
+namespace Domain.Shipping.Location
 
 open System
 open System.Text.RegularExpressions
@@ -16,6 +16,12 @@ type UnLocode(value: string) =
         if not matches.Success then raise <| ArgumentException("Provided value is not a valid UnLocode", "value")
 
     member val Value = value
+    override this.GetHashCode() =
+        hash (value)
+    override this.Equals(other) =
+        match other with
+        | :? UnLocode as o -> (value) = (o.Value)
+        | _ -> false
 
 [<AllowNullLiteral>]
 type Location(unlocode: UnLocode, name: string) =
@@ -28,3 +34,9 @@ type Location(unlocode: UnLocode, name: string) =
 
     member val UnLocode = unlocode
     member val Name = name
+    override this.GetHashCode() =
+        hash (unlocode, name)
+    override this.Equals(other) =
+        match other with
+        | :? Location as o -> (unlocode, name) = (o.UnLocode, o.Name)
+        | _ -> false    

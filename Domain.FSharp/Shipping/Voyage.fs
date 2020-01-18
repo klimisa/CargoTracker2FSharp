@@ -1,4 +1,4 @@
-namespace FSharp.Domain.Shipping.Cargo
+namespace Domain.Shipping.Voyage
 
 open System
 
