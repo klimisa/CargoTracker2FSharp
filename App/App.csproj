@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain.FSharp\Domain.FSharp.fsproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Domain.FSharp\Domain.FSharp.fsproj" />
   </ItemGroup>
 
 </Project>

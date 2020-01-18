@@ -1,4 +1,4 @@
-namespace FSharp.Domain.Shipping.Location
+namespace Domain.Shipping.Location
 
 open System
 open System.Text.RegularExpressions

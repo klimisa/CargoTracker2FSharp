@@ -1,7 +1,6 @@
 ﻿using System;
 using AutoFixture.Xunit2;
 using Domain.Shipping.Cargo;
-using Domain.Shipping.Cargo.Events;
 using Domain.Tests.Shipping.Cargo.Infra;
 using FluentAssertions;
 using Xunit;
@@ -9,6 +8,8 @@ using AutoFixture;
 
 namespace Domain.Tests.Shipping.Cargo
 {
+    using System.Diagnostics.Tracing;
+
     public class CargoUnitTest
     {
         [Theory]
@@ -43,7 +44,7 @@ namespace Domain.Tests.Shipping.Cargo
             Assert.Equal(routeSpec, sut.RouteSpec);
             Assert.Equal(routeSpec, sut.Delivery.RouteSpec);
 
-            sut.Events[0].Should().BeEquivalentTo(new NewBooked(trackingId, routeSpec));
+            sut.Events[0].Should().BeEquivalentTo(new Events.NewBooked(trackingId, routeSpec));
         }   
 
         [Theory]
@@ -71,8 +72,8 @@ namespace Domain.Tests.Shipping.Cargo
             Assert.Equal(itinerary, sut.Itinerary);
             Assert.Equal(itinerary, sut.Delivery.Itinerary);
 
-            sut.Events[1].Should().BeEquivalentTo(new AssignedToItinerary(sut.TrackingId, itinerary));
-            sut.Events[2].Should().BeEquivalentTo(new DeliveryStateChanged(sut.TrackingId, sut.Delivery));
+            sut.Events[1].Should().BeEquivalentTo(new Events.AssignedToItinerary(sut.TrackingId, itinerary));
+            sut.Events[2].Should().BeEquivalentTo(new Events.DeliveryStateChanged(sut.TrackingId, sut.Delivery));
         }
 
         [Theory]
@@ -98,8 +99,8 @@ namespace Domain.Tests.Shipping.Cargo
             Assert.Equal(routeSpec, sut.RouteSpec);
             Assert.Equal(routeSpec, sut.Delivery.RouteSpec);
 
-            sut.Events[1].Should().BeEquivalentTo(new RouteChanged(sut.TrackingId, routeSpec));
-            sut.Events[2].Should().BeEquivalentTo(new DeliveryStateChanged(sut.TrackingId, sut.Delivery));
+            sut.Events[1].Should().BeEquivalentTo(new Events.RouteChanged(sut.TrackingId, routeSpec));
+            sut.Events[2].Should().BeEquivalentTo(new Events.DeliveryStateChanged(sut.TrackingId, sut.Delivery));
         }
 
         [Theory]
@@ -116,8 +117,8 @@ namespace Domain.Tests.Shipping.Cargo
             Assert.Equal(@event, sut.LastHandlingEvent);
             Assert.Equal(@event, sut.Delivery.LastHandlingEvent);
 
-            sut.Events[1].Should().BeEquivalentTo(new HandlingEventRegistered(@event));
-            sut.Events[2].Should().BeEquivalentTo(new DeliveryStateChanged(sut.TrackingId, sut.Delivery));
+            sut.Events[1].Should().BeEquivalentTo(new Events.HandlingEventRegistered(@event));
+            sut.Events[2].Should().BeEquivalentTo(new Events.DeliveryStateChanged(sut.TrackingId, sut.Delivery));
         }
 
     }

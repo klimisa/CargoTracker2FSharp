@@ -11,4 +11,8 @@
     <None Remove="Domain.v3.ncrunchproject" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Domain.FSharp\Domain.FSharp.fsproj" />
+  </ItemGroup>
+
 </Project>

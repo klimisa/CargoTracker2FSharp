@@ -1,6 +1,8 @@
-namespace FSharp.Domain.Shipping.Cargo
+namespace Domain.Shipping.Cargo
 
-open FSharp.Domain.Shipping.Location
+open Domain
+open Domain.Shipping.Location
+open Domain.Shipping.Voyage
 open System
 open System.Collections.Generic
 open System.Collections.ObjectModel
@@ -249,8 +251,55 @@ type Delivery(routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingE
         if isNull event || isNull itinerary then this.IsMishandled <- false
         else this.IsMishandled <- itinerary.IsExpected event
 
+module Events =
+    type NewBooked(trackingId: TrackingId, routeSpec: RouteSpecification) =
+
+        do
+            if isNull routeSpec then raise <| ArgumentNullException "trackingId"
+
+        interface IEvent
+        member val TrackingId = trackingId
+        member val RouteSpec = routeSpec
+
+    type AssignedToItinerary(trackingId: TrackingId, itinerary: Itinerary) =
+
+        do
+            if isNull itinerary then raise <| ArgumentNullException "itinerary"
+
+        interface IEvent
+        member val TrackingId = trackingId
+        member val Itinerary = itinerary
+
+    type RouteChanged(trackingId: TrackingId, routeSpec: RouteSpecification) =
+
+        do
+            if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
+
+        interface IEvent
+        member val TrackingId = trackingId
+        member val RouteSpec = routeSpec
+
+    type DeliveryStateChanged(trackingId: TrackingId, delivery: Delivery) =
+
+        do
+            if isNull delivery then raise <| ArgumentNullException "delivery"
+
+        interface IEvent
+        member val TrackingId = trackingId
+        member val Delivery = delivery
+
+    type HandlingEventRegistered(event: HandlingEvent) =
+
+        do
+            if isNull event then raise <| ArgumentNullException "event"
+
+        interface IEvent
+        member val HandlingEvent = event
+
 [<AllowNullLiteral>]
 type Cargo(trackingId: TrackingId, routeSpec: RouteSpecification) =
+    inherit BaseAggregateRoot()
+
     [<DefaultValue>]
     val mutable private _itinerary: Itinerary
 
@@ -259,6 +308,7 @@ type Cargo(trackingId: TrackingId, routeSpec: RouteSpecification) =
 
     do
         if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
+        base.Events.Add <| Events.NewBooked(trackingId, routeSpec)
 
     let mutable _trackingId: TrackingId = trackingId
     let mutable _routeSpec: RouteSpecification = routeSpec
@@ -298,14 +348,19 @@ type Cargo(trackingId: TrackingId, routeSpec: RouteSpecification) =
         if isNull itinerary then raise <| ArgumentNullException "itinerary"
         this.Itinerary <- itinerary
         this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
-    // TODO: add events
+        base.Events.Add <| Events.AssignedToItinerary(this.TrackingId, this.Itinerary)
+        base.Events.Add <| Events.DeliveryStateChanged(this.TrackingId, this.Delivery)
+
     member this.ChangeRoute(routeSpec: RouteSpecification) =
         if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
         this.RouteSpec <- routeSpec
         this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
-    // TODO: add events
+        base.Events.Add <| Events.RouteChanged(this.TrackingId, this.RouteSpec)
+        base.Events.Add <| Events.DeliveryStateChanged(this.TrackingId, this.Delivery)
+
     member this.RegisterHandlingEvent(event: HandlingEvent) =
         if isNull event then raise <| ArgumentNullException "event"
         this.LastHandlingEvent <- event
         this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
-// TODO: add events
+        base.Events.Add <| Events.HandlingEventRegistered(event)
+        base.Events.Add <| Events.DeliveryStateChanged(this.TrackingId, this.Delivery)
