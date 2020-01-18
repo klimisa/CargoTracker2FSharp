@@ -9,11 +9,6 @@ namespace Domain.Shipping.Cargo
             Value = value;
         }
 
-        public TrackingId()
-        {
-            Value = Guid.NewGuid();
-        }
-
         public Guid Value { get; }
     }
 }

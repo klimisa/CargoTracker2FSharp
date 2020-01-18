@@ -17,6 +17,7 @@ type UnLocode(value: string) =
 
     member val Value = value
 
+[<AllowNullLiteral>]
 type Location(unlocode: UnLocode, name: string) =
 
     do
