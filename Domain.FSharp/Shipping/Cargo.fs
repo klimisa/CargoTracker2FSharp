@@ -102,13 +102,15 @@ type Itinerary(legs: IList<Leg>) =
     member this.Of(location: UnLocode) =
         this.Legs.SingleOrDefault(fun l -> l.UnloadLocation = location || l.LoadLocation = location)
     member this.IsExpected(event: HandlingEvent) =
-        match event.Type with
-        | HandlingType.Receive -> this.FirstLoadLocation = event.Location
-        | HandlingType.Load -> this.Legs.Any(fun l -> l.LoadLocation = event.Location)
-        | HandlingType.Unload -> this.Legs.Any(fun l -> l.UnloadLocation = event.Location)
-        | HandlingType.Claim
-        | HandlingType.Customs -> this.LastUnloadLocation = event.Location
-        | _ -> false
+        if isNull event then true
+        else
+            match event.Type with
+            | HandlingType.Receive -> this.FirstLoadLocation = event.Location
+            | HandlingType.Load -> this.Legs.Any(fun l -> l.LoadLocation = event.Location)
+            | HandlingType.Unload -> this.Legs.Any(fun l -> l.UnloadLocation = event.Location)
+            | HandlingType.Claim
+            | HandlingType.Customs -> this.LastUnloadLocation = event.Location
+            | _ -> false
 
 [<AllowNullLiteral>]
 type RouteSpecification(origin: UnLocode, destination: UnLocode, arrivalDeadline: DateTime) =

@@ -5,7 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="scratchpad.fsx" />
         <Compile Include="Shipping\Infra.fs" />
         <Compile Include="Shipping\Voyage.fs" />
         <Compile Include="Shipping\Location.fs" />
