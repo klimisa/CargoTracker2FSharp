@@ -2,6 +2,7 @@ namespace FSharp.Domain.Shipping.Cargo
 
 open System
 
+[<AllowNullLiteral>]
 type VoyageNumber(value: string) =
 
     do

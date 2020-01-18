@@ -27,7 +27,7 @@ namespace Domain.Shipping.Cargo
         }
 
         // rehydration ctor
-        public Cargo(TrackingId trackingId, RouteSpecification routeSpec, Itinerary itinerary, Delivery delivery, HandlingEvent lastHandlingEvent)
+        public Cargo(TrackingId trackingId, RouteSpecification routeSpec, Itinerary itinerary, HandlingEvent lastHandlingEvent)
         {
             TrackingId = trackingId;
             RouteSpec = routeSpec;
@@ -66,6 +66,5 @@ namespace Domain.Shipping.Cargo
             Events.Add(new HandlingEventRegistered(@event));
             Events.Add(new DeliveryStateChanged(TrackingId, Delivery));
         }
-
     }
 }
