@@ -30,6 +30,12 @@ type TransportStatus =
 [<AllowNullLiteral>]
 type TrackingId(value: Guid) =
     member this.Value = value
+    override this.GetHashCode() =
+        hash (value)
+    override this.Equals(other) =
+        match other with
+        | :? TrackingId as o -> (value) = (o.Value)
+        | _ -> false    
 
 [<AllowNullLiteral>]
 type Leg(voyage: VoyageNumber, loadLocation: UnLocode, unloadLocation: UnLocode, loadTime: DateTime, unloadTime: DateTime) =
@@ -148,7 +154,6 @@ type Delivery(routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingE
 
     do
         if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
-        if isNull itinerary then raise <| ArgumentNullException "itinerary"
 
     member val RouteSpec = routeSpec
     member val Itinerary = itinerary
@@ -209,10 +214,16 @@ type Delivery(routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingE
         else this.RoutingStatus <- RoutingStatus.MisRouted
 
     member private this._calcLastKnownLocation (event: HandlingEvent) =
-        if isNull event then this.LastKnownLocation <- event.Location
+        if not (isNull event) then 
+            this.LastKnownLocation <- event.Location
+        else
+            this.LastKnownLocation <- null
 
     member private this._calcCurrentVoyage (event: HandlingEvent) =
-        if isNull event then this.CurrentVoyage <- event.Voyage
+        if not (isNull event) then
+            this.CurrentVoyage <- event.Voyage
+        else
+            this.CurrentVoyage <- null            
 
     member private this._calcNextExpectedHandlingActivity (routeSpec: RouteSpecification) (itinerary: Itinerary)
            (event: HandlingEvent) =
@@ -317,12 +328,15 @@ type Cargo(trackingId: TrackingId, routeSpec: RouteSpecification) =
     do
         if isNull trackingId then raise <| ArgumentNullException "trackingId"
         if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
-        base.Events.Add <| Events.NewBooked(trackingId, routeSpec)
+        
 
     let mutable _trackingId: TrackingId = trackingId
     let mutable _routeSpec: RouteSpecification = routeSpec
     let mutable _delivery: Delivery = Delivery(routeSpec, null, null)
 
+    do
+        base.Events.Add <| Events.NewBooked (trackingId, routeSpec)
+        
     // rehydration ctor
     new(trackingId: TrackingId, routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingEvent: HandlingEvent) as self =
         Cargo(trackingId, routeSpec, itinerary, lastHandlingEvent)

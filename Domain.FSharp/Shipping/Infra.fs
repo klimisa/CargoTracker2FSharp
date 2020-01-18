@@ -7,4 +7,4 @@ type IEvent = interface end
 [<AllowNullLiteral>]
 [<AbstractClass>]
 type BaseAggregateRoot() =
-    member this.Events = List<IEvent>() :> IList<IEvent>
+    member val Events = List<IEvent>() :> IList<IEvent>
