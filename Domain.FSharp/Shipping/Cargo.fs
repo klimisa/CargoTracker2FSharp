@@ -110,7 +110,8 @@ type Itinerary(legs: IList<Leg>) =
     member this.Of(location: UnLocode) =
         this.Legs.SingleOrDefault(fun l -> l.UnloadLocation = location || l.LoadLocation = location)
     member this.IsExpected(event: HandlingEvent) =
-        if isNull event then true
+        if isNull event then
+            true
         else
             match event.Type with
             | HandlingType.Receive -> this.FirstLoadLocation = event.Location
@@ -214,16 +215,12 @@ type Delivery(routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingE
         else this.RoutingStatus <- RoutingStatus.MisRouted
 
     member private this._calcLastKnownLocation (event: HandlingEvent) =
-        if not (isNull event) then 
-            this.LastKnownLocation <- event.Location
-        else
-            this.LastKnownLocation <- null
+        if not (isNull event) then this.LastKnownLocation <- event.Location
+        else this.LastKnownLocation <- null
 
     member private this._calcCurrentVoyage (event: HandlingEvent) =
-        if not (isNull event) then
-            this.CurrentVoyage <- event.Voyage
-        else
-            this.CurrentVoyage <- null            
+        if not (isNull event) then this.CurrentVoyage <- event.Voyage
+        else this.CurrentVoyage <- null
 
     member private this._calcNextExpectedHandlingActivity (routeSpec: RouteSpecification) (itinerary: Itinerary)
            (event: HandlingEvent) =
@@ -328,15 +325,13 @@ type Cargo(trackingId: TrackingId, routeSpec: RouteSpecification) =
     do
         if isNull trackingId then raise <| ArgumentNullException "trackingId"
         if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
-        
 
     let mutable _trackingId: TrackingId = trackingId
     let mutable _routeSpec: RouteSpecification = routeSpec
     let mutable _delivery: Delivery = Delivery(routeSpec, null, null)
 
-    do
-        base.Events.Add <| Events.NewBooked (trackingId, routeSpec)
-        
+    do base.Events.Add <| Events.NewBooked(trackingId, routeSpec)
+
     // rehydration ctor
     new(trackingId: TrackingId, routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingEvent: HandlingEvent) as self =
         Cargo(trackingId, routeSpec, itinerary, lastHandlingEvent)
@@ -368,22 +363,28 @@ type Cargo(trackingId: TrackingId, routeSpec: RouteSpecification) =
         and private set (value) = this._lastHandlingEvent <- value
 
     member this.AssignToItinerary(itinerary: Itinerary) =
-        if isNull itinerary then raise <| ArgumentNullException "itinerary"
-        this.Itinerary <- itinerary
-        this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
-        base.Events.Add <| Events.AssignedToItinerary(this.TrackingId, this.Itinerary)
-        base.Events.Add <| Events.DeliveryStateChanged(this.TrackingId, this.Delivery)
+        if isNull itinerary then
+            raise <| ArgumentNullException "itinerary"
+        else
+            this.Itinerary <- itinerary
+            this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
+            base.Events.Add <| Events.AssignedToItinerary(this.TrackingId, this.Itinerary)
+            base.Events.Add <| Events.DeliveryStateChanged(this.TrackingId, this.Delivery)
 
     member this.ChangeRoute(routeSpec: RouteSpecification) =
-        if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
-        this.RouteSpec <- routeSpec
-        this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
-        base.Events.Add <| Events.RouteChanged(this.TrackingId, this.RouteSpec)
-        base.Events.Add <| Events.DeliveryStateChanged(this.TrackingId, this.Delivery)
+        if isNull routeSpec then
+            raise <| ArgumentNullException "routeSpec"
+        else
+            this.RouteSpec <- routeSpec
+            this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
+            base.Events.Add <| Events.RouteChanged(this.TrackingId, this.RouteSpec)
+            base.Events.Add <| Events.DeliveryStateChanged(this.TrackingId, this.Delivery)
 
     member this.RegisterHandlingEvent(event: HandlingEvent) =
-        if isNull event then raise <| ArgumentNullException "event"
-        this.LastHandlingEvent <- event
-        this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
-        base.Events.Add <| Events.HandlingEventRegistered(event)
-        base.Events.Add <| Events.DeliveryStateChanged(this.TrackingId, this.Delivery)
+        if isNull event then
+            raise <| ArgumentNullException "event"
+        else
+            this.LastHandlingEvent <- event
+            this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
+            base.Events.Add <| Events.HandlingEventRegistered(event)
+            base.Events.Add <| Events.DeliveryStateChanged(this.TrackingId, this.Delivery)
