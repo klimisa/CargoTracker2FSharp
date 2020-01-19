@@ -53,33 +53,33 @@ type Leg(voyage: VoyageNumber, loadLocation: UnLocode, unloadLocation: UnLocode,
     member val UnloadTime = unloadTime
 
 [<AllowNullLiteral>]
-type HandlingEvent(trackingId: TrackingId, type': HandlingType, location: UnLocode, voyage: VoyageNumber, completed: DateTime, registered: DateTime) =
+type HandlingEvent(trackingId: TrackingId, ``type``: HandlingType, location: UnLocode, voyage: VoyageNumber, completed: DateTime, registered: DateTime) =
 
     do
         if isNull trackingId then raise <| ArgumentNullException "trackingId"
         if isNull location then raise <| ArgumentNullException "location"
-        if (type' = HandlingType.Load || type' = HandlingType.Unload) && isNull voyage then
+        if (``type`` = HandlingType.Load || ``type`` = HandlingType.Unload) && isNull voyage then
             raise <| InvalidOperationException "loading/unloading events need a voyage"
 
     member val TrackingId = trackingId
     member val Location = location
-    member val Type = type'
+    member val Type = ``type``
     member val Voyage = voyage
     member val Completed = completed
     member val Registered = registered
 
 [<AllowNullLiteral>]
-type HandlingActivity(type': HandlingType, location: UnLocode, voyage: VoyageNumber) =
+type HandlingActivity(``type``: HandlingType, location: UnLocode, voyage: VoyageNumber) =
 
     do
         if isNull location then raise <| ArgumentNullException "location"
-        if type' = HandlingType.Load && isNull voyage then
+        if ``type`` = HandlingType.Load && isNull voyage then
             raise <| InvalidOperationException "a load activity needs a voyage"
-        if type' = HandlingType.Unload && isNull voyage then
+        if ``type`` = HandlingType.Unload && isNull voyage then
             raise <| InvalidOperationException "an unload activity needs a voyage"
 
     member val Location = location
-    member val Type = type'
+    member val Type = ``type``
     member val Voyage = voyage
 
 [<AllowNullLiteral>]
@@ -109,16 +109,16 @@ type Itinerary(legs: IList<Leg>) =
 
     member this.Of(location: UnLocode) =
         this.Legs.SingleOrDefault(fun l -> l.UnloadLocation = location || l.LoadLocation = location)
-    member this.IsExpected(event: HandlingEvent) =
-        if isNull event then
+    member this.IsExpected(``event``: HandlingEvent) =
+        if isNull ``event`` then
             true
         else
-            match event.Type with
-            | HandlingType.Receive -> this.FirstLoadLocation = event.Location
-            | HandlingType.Load -> this.Legs.Any(fun l -> l.LoadLocation = event.Location)
-            | HandlingType.Unload -> this.Legs.Any(fun l -> l.UnloadLocation = event.Location)
+            match ``event``.Type with
+            | HandlingType.Receive -> this.FirstLoadLocation = ``event``.Location
+            | HandlingType.Load -> this.Legs.Any(fun l -> l.LoadLocation = ``event``.Location)
+            | HandlingType.Unload -> this.Legs.Any(fun l -> l.UnloadLocation = ``event``.Location)
             | HandlingType.Claim
-            | HandlingType.Customs -> this.LastUnloadLocation = event.Location
+            | HandlingType.Customs -> this.LastUnloadLocation = ``event``.Location
             | _ -> false
 
 [<AllowNullLiteral>]
@@ -197,11 +197,11 @@ type Delivery(routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingE
         with get () = this._isMishandled
         and private set (value) = this._isMishandled <- value
 
-    member private this._calcTransportStatus (event: HandlingEvent) =
-        if isNull event then
+    member private this._calcTransportStatus (``event``: HandlingEvent) =
+        if isNull ``event`` then
             this.TransportStatus <- TransportStatus.NotReceived
         else
-            match event.Type with
+            match ``event``.Type with
             | HandlingType.Load -> this.TransportStatus <- TransportStatus.OnBoardVessel
             | HandlingType.Unload
             | HandlingType.Receive
@@ -214,40 +214,40 @@ type Delivery(routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingE
         else if routeSpec.IsSatisfiedBy itinerary then this.RoutingStatus <- RoutingStatus.Routed
         else this.RoutingStatus <- RoutingStatus.MisRouted
 
-    member private this._calcLastKnownLocation (event: HandlingEvent) =
-        if not (isNull event) then this.LastKnownLocation <- event.Location
+    member private this._calcLastKnownLocation (``event``: HandlingEvent) =
+        if not (isNull ``event``) then this.LastKnownLocation <- ``event``.Location
         else this.LastKnownLocation <- null
 
-    member private this._calcCurrentVoyage (event: HandlingEvent) =
-        if not (isNull event) then this.CurrentVoyage <- event.Voyage
+    member private this._calcCurrentVoyage (``event``: HandlingEvent) =
+        if not (isNull ``event``) then this.CurrentVoyage <- ``event``.Voyage
         else this.CurrentVoyage <- null
 
     member private this._calcNextExpectedHandlingActivity (routeSpec: RouteSpecification) (itinerary: Itinerary)
-           (event: HandlingEvent) =
+           (``event``: HandlingEvent) =
         if isNull itinerary then
             this.NextExpectedHandlingActivity <- null
         else
             this._calcRoutingStatus routeSpec itinerary
             if this.RoutingStatus = RoutingStatus.MisRouted then
                 this.NextExpectedHandlingActivity <- null
-            else if isNull event then
+            else if isNull ``event`` then
                 this.NextExpectedHandlingActivity <-
                     HandlingActivity(HandlingType.Receive, itinerary.FirstLoadLocation, null)
             else
-                match event.Type with
+                match ``event``.Type with
                 | HandlingType.Receive ->
                     this.NextExpectedHandlingActivity <-
                         HandlingActivity(HandlingType.Load, itinerary.FirstLoadLocation, itinerary.FirstVoyage)
                 | HandlingType.Load ->
-                    let leg = itinerary.Of event.Location
+                    let leg = itinerary.Of ``event``.Location
                     this.NextExpectedHandlingActivity <-
                         HandlingActivity(HandlingType.Unload, leg.UnloadLocation, leg.Voyage)
                 | HandlingType.Unload ->
-                    if event.Location = itinerary.LastUnloadLocation then
+                    if ``event``.Location = itinerary.LastUnloadLocation then
                         this.NextExpectedHandlingActivity <-
                             HandlingActivity(HandlingType.Customs, itinerary.LastUnloadLocation, null)
                     else
-                        let nextLeg = itinerary.NextOf event.Location
+                        let nextLeg = itinerary.NextOf ``event``.Location
                         this.NextExpectedHandlingActivity <-
                             HandlingActivity(HandlingType.Load, nextLeg.LoadLocation, nextLeg.Voyage)
                 | HandlingType.Customs ->
@@ -255,13 +255,13 @@ type Delivery(routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingE
                         HandlingActivity(HandlingType.Claim, itinerary.LastUnloadLocation, null)
                 | _ -> this.NextExpectedHandlingActivity <- null
 
-    member private this._calcIsUnloadedAtDestination (routeSpec: RouteSpecification) (event: HandlingEvent) =
-        if isNull event then this.IsUnloadedAtDestination <- false
-        else this.IsUnloadedAtDestination <- routeSpec.Destination = event.Location
+    member private this._calcIsUnloadedAtDestination (routeSpec: RouteSpecification) (``event``: HandlingEvent) =
+        if isNull ``event`` then this.IsUnloadedAtDestination <- false
+        else this.IsUnloadedAtDestination <- routeSpec.Destination = ``event``.Location
 
-    member private this._calcIsMishandled (itinerary: Itinerary) (event: HandlingEvent) =
-        if isNull event || isNull itinerary then this.IsMishandled <- false
-        else this.IsMishandled <- itinerary.IsExpected event
+    member private this._calcIsMishandled (itinerary: Itinerary) (``event``: HandlingEvent) =
+        if isNull ``event`` || isNull itinerary then this.IsMishandled <- false
+        else this.IsMishandled <- itinerary.IsExpected ``event``
 
 module Events =
     type NewBooked(trackingId: TrackingId, routeSpec: RouteSpecification) =
@@ -304,13 +304,13 @@ module Events =
         member val TrackingId = trackingId
         member val Delivery = delivery
 
-    type HandlingEventRegistered(event: HandlingEvent) =
+    type HandlingEventRegistered(``event``: HandlingEvent) =
 
         do
-            if isNull event then raise <| ArgumentNullException "event"
+            if isNull ``event`` then raise <| ArgumentNullException "``event``"
 
         interface IEvent
-        member val HandlingEvent = event
+        member val HandlingEvent = ``event``
 
 [<AllowNullLiteral>]
 type Cargo(trackingId: TrackingId, routeSpec: RouteSpecification) =
@@ -380,11 +380,11 @@ type Cargo(trackingId: TrackingId, routeSpec: RouteSpecification) =
             base.Events.Add <| Events.RouteChanged(this.TrackingId, this.RouteSpec)
             base.Events.Add <| Events.DeliveryStateChanged(this.TrackingId, this.Delivery)
 
-    member this.RegisterHandlingEvent(event: HandlingEvent) =
-        if isNull event then
+    member this.RegisterHandlingEvent(``event``: HandlingEvent) =
+        if isNull ``event`` then
             raise <| ArgumentNullException "event"
         else
-            this.LastHandlingEvent <- event
+            this.LastHandlingEvent <- ``event``
             this.Delivery <- Delivery(this.RouteSpec, this.Itinerary, this.LastHandlingEvent)
-            base.Events.Add <| Events.HandlingEventRegistered(event)
+            base.Events.Add <| Events.HandlingEventRegistered(``event``)
             base.Events.Add <| Events.DeliveryStateChanged(this.TrackingId, this.Delivery)
