@@ -1,4 +1,5 @@
-### CargoTracker2FSharp
+### CargoTracker2FSharp 
+[![Build status](https://ci.appveyor.com/api/projects/status/62nahb7bkrarkmdm?svg=true)](https://ci.appveyor.com/project/klimisa/cargotracker2fsharp)
 
 [Carco Tracker](https://github.com/gtourkas/CargoTracker2) initially made by [@tourkas](https://twitter.com/georgetourkas) for demonstrating Domain Driven Design principles to the [DDDGreece](https://meetup.com/dddgreece) community.
 
