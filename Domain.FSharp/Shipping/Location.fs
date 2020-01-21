@@ -16,10 +16,10 @@ type UnLocode(value: string) =
 
     member val Value = value
     override this.GetHashCode() =
-        hash (value)
+        hash value
     override this.Equals(other) =
         match other with
-        | :? UnLocode as o -> (value) = (o.Value)
+        | :? UnLocode as o -> value = o.Value
         | _ -> false
 
 [<AllowNullLiteral>]
