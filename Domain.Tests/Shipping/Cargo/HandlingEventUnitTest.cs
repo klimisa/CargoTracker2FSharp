@@ -11,26 +11,6 @@ namespace Domain.Tests.Shipping.Cargo
     {
         [Theory]
         [AutoData]
-        public void Ctor__NoTrackingIdGiven__ThrowsArgumentNullException(
-            HandlingType type,
-            UnLocode location,
-            VoyageNumber voyage,
-            DateTime completed,
-            DateTime registered
-            )
-        {
-            Assert.Throws<ArgumentNullException>(() => new HandlingEvent(
-                null,
-                type,
-                location,
-                voyage,
-                completed,
-                registered
-                ));
-        }
-
-        [Theory]
-        [AutoData]
         public void Ctor__NoLocationGiven__ThrowsArgumentNullException(
             TrackingId trackingId,
             HandlingType type,

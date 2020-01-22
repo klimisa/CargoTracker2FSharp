@@ -27,36 +27,20 @@ type TransportStatus =
     | Claimed = 3
     | Unknown = 4
 
-[<AllowNullLiteral>]
-type TrackingId(value: Guid) =
-    member this.Value = value
-    override this.GetHashCode() =
-        hash (value)
-    override this.Equals(other) =
-        match other with
-        | :? TrackingId as o -> (value) = (o.Value)
-        | _ -> false    
+type TrackingId = TrackingId of Guid
 
-[<AllowNullLiteral>]
-type Leg(voyage: VoyageNumber, loadLocation: UnLocode, unloadLocation: UnLocode, loadTime: DateTime, unloadTime: DateTime) =
-
-    do
-        if isNull voyage then raise <| ArgumentNullException "voyage"
-        if isNull loadLocation then raise <| ArgumentNullException "loadLocation"
-        if isNull unloadLocation then raise <| ArgumentNullException "unloadLocation"
-        if loadTime >= unloadTime then raise <| ArgumentException "unloadTime should be later than loadTime"
-
-    member val Voyage = voyage
-    member val LoadLocation = loadLocation
-    member val UnloadLocation = unloadLocation
-    member val LoadTime = loadTime
-    member val UnloadTime = unloadTime
+type Leg = {
+    Voyage: VoyageNumber
+    LoadLocation: UnLocode
+    UnloadLocation: UnLocode
+    LoadTime: DateTime
+    UnloadTime: DateTime
+}
 
 [<AllowNullLiteral>]
 type HandlingEvent(trackingId: TrackingId, ``type``: HandlingType, location: UnLocode, voyage: VoyageNumber, completed: DateTime, registered: DateTime) =
 
     do
-        if isNull trackingId then raise <| ArgumentNullException "trackingId"
         if isNull location then raise <| ArgumentNullException "location"
         if (``type`` = HandlingType.Load || ``type`` = HandlingType.Unload) && isNull voyage then
             raise <| InvalidOperationException "loading/unloading events need a voyage"
@@ -102,7 +86,8 @@ type Itinerary(legs: IList<Leg>) =
         let en = this.Legs.GetEnumerator()
         while en.MoveNext() && not breakLoop do
             if currentFound then
-                next <- en.Current
+              //  TODO: next <- en.Current
+//                next <- en.Current
                 breakLoop <- true
             if en.Current.LoadLocation = location || en.Current.UnloadLocation = location then currentFound <- true
         next
@@ -267,7 +252,6 @@ module Events =
     type NewBooked(trackingId: TrackingId, routeSpec: RouteSpecification) =
 
         do
-            if isNull trackingId then raise <| ArgumentNullException "trackingId"
             if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
 
         interface IEvent
@@ -277,7 +261,6 @@ module Events =
     type AssignedToItinerary(trackingId: TrackingId, itinerary: Itinerary) =
 
         do
-            if isNull trackingId then raise <| ArgumentNullException "trackingId"
             if isNull itinerary then raise <| ArgumentNullException "itinerary"
 
         interface IEvent
@@ -287,7 +270,6 @@ module Events =
     type RouteChanged(trackingId: TrackingId, routeSpec: RouteSpecification) =
 
         do
-            if isNull trackingId then raise <| ArgumentNullException "trackingId"
             if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
 
         interface IEvent
@@ -297,7 +279,6 @@ module Events =
     type DeliveryStateChanged(trackingId: TrackingId, delivery: Delivery) =
 
         do
-            if isNull trackingId then raise <| ArgumentNullException "trackingId"
             if isNull delivery then raise <| ArgumentNullException "delivery"
 
         interface IEvent
@@ -323,7 +304,6 @@ type Cargo(trackingId: TrackingId, routeSpec: RouteSpecification) =
     val mutable private _lastHandlingEvent: HandlingEvent
 
     do
-        if isNull trackingId then raise <| ArgumentNullException "trackingId"
         if isNull routeSpec then raise <| ArgumentNullException "routeSpec"
 
     let mutable _trackingId: TrackingId = trackingId
