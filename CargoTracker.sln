@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Tests", "Domain.Test
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Domain.FSharp", "Domain.FSharp\Domain.FSharp.fsproj", "{59097E59-1C74-41B7-B100-504C02C83773}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Domain.FSharp.Tests", "Domain.FSharp.Tests\Domain.FSharp.Tests.fsproj", "{B186BF82-FBF4-499D-BB73-00506DEBD055}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{59097E59-1C74-41B7-B100-504C02C83773}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59097E59-1C74-41B7-B100-504C02C83773}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59097E59-1C74-41B7-B100-504C02C83773}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B186BF82-FBF4-499D-BB73-00506DEBD055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B186BF82-FBF4-499D-BB73-00506DEBD055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B186BF82-FBF4-499D-BB73-00506DEBD055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B186BF82-FBF4-499D-BB73-00506DEBD055}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
