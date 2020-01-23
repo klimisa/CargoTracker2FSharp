@@ -2,10 +2,10 @@ namespace Domain.Shipping.Voyage
 
 open System
 
-[<AllowNullLiteral>]
-type VoyageNumber(value: string) =
+type VoyageNumber = private VoyageNumber of string
 
-    do
-        if isNull value then raise (ArgumentNullException("value"))
-
-    member val Value = value
+module VoyageNumber =
+    let value (VoyageNumber str) = str
+    let create value =
+        if String.IsNullOrWhiteSpace value then Error "VoyageNumber cannot be empty or null."
+        else Ok (VoyageNumber value)
