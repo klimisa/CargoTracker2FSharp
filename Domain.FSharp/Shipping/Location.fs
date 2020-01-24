@@ -8,12 +8,12 @@ type UnLocode = private UnLocode of string
 
 module UnLocode =
     let value (UnLocode str) = str
+
     let create value =
-        let pattern = Regex "[a-zA-Z]{2}[a-zA-Z2-9]{3}"
-        let matches = pattern.Match value
+        let pattern = "[a-zA-Z]{2}[a-zA-Z2-9]{3}"
         if String.IsNullOrWhiteSpace value then Error "Unlocode cannot be empty or null."
-        else if not matches.Success then Error "Provided value is not a valid UnLocode"
-        else Ok (UnLocode value)
+        else if Regex.IsMatch(value, pattern) then Ok(UnLocode value)
+        else Error "Provided value is not a valid UnLocode"
 
 type Location =
     { UnLocode: UnLocode
