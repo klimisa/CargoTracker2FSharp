@@ -1,4 +1,4 @@
-namespace Domain.Shipping.Voyage
+namespace Domain.Voyage
 
 open System
 

@@ -1,53 +1,12 @@
-namespace Domain.Shipping.Cargo
+namespace Domain.Shipping
 
-open Domain
-open Domain.Shipping.Location
-open Domain.Shipping.Voyage
 open System
 open System.Collections.Generic
 open System.Collections.ObjectModel
 open System.Linq
 
-type HandlingType =
-    | Load = 0
-    | Unload = 1
-    | Receive = 2
-    | Claim = 3
-    | Customs = 4
-
-type RoutingStatus =
-    | NotRouted = 0
-    | Routed = 1
-    | MisRouted = 2
-
-type TransportStatus =
-    | NotReceived = 0
-    | InPort = 1
-    | OnBoardVessel = 2
-    | Claimed = 3
-    | Unknown = 4
-
-type TrackingId = TrackingId of Guid
-
-type Leg =
-    { Voyage: VoyageNumber
-      LoadLocation: UnLocode
-      UnloadLocation: UnLocode
-      LoadTime: DateTime
-      UnloadTime: DateTime }
-
-type HandlingEvent =
-    { TrackingId: TrackingId
-      Location: UnLocode
-      Type: HandlingType
-      Voyage: VoyageNumber
-      Completed: DateTime
-      Registered: DateTime }
-
-type HandlingActivity =
-    { Location: UnLocode
-      Type: HandlingType
-      Voyage: VoyageNumber }
+open Domain.Location
+open Domain.Voyage
 
 [<AllowNullLiteral>]
 type Itinerary(legs: IList<Leg>) =
@@ -78,17 +37,17 @@ type Itinerary(legs: IList<Leg>) =
     member this.Of(location: UnLocode) =
         this.Legs.SingleOrDefault(fun l -> l.UnloadLocation = location || l.LoadLocation = location)
     member this.IsExpected(``event``: HandlingEvent) =
-            // TODO:isNull event
-//        if isNull event then
-//            true
-//        else
-            match event.Type with
-            | HandlingType.Receive -> this.FirstLoadLocation = event.Location
-            | HandlingType.Load -> this.Legs.Any(fun l -> l.LoadLocation = event.Location)
-            | HandlingType.Unload -> this.Legs.Any(fun l -> l.UnloadLocation = event.Location)
-            | HandlingType.Claim
-            | HandlingType.Customs -> this.LastUnloadLocation = event.Location
-            | _ -> false
+        // TODO:isNull event
+        //        if isNull event then
+        //            true
+        //        else
+        match event.Type with
+        | HandlingType.Receive -> this.FirstLoadLocation = event.Location
+        | HandlingType.Load -> this.Legs.Any(fun l -> l.LoadLocation = event.Location)
+        | HandlingType.Unload -> this.Legs.Any(fun l -> l.UnloadLocation = event.Location)
+        | HandlingType.Claim
+        | HandlingType.Customs -> this.LastUnloadLocation = event.Location
+        | _ -> false
 
 [<AllowNullLiteral>]
 type RouteSpecification(origin: UnLocode, destination: UnLocode, arrivalDeadline: DateTime) =
@@ -165,17 +124,17 @@ type Delivery(routeSpec: RouteSpecification, itinerary: Itinerary, lastHandlingE
         and private set (value) = this._isMishandled <- value
 
     member private this._calcTransportStatus (``event``: HandlingEvent) =
-            // TODO: isNull event
-//        if isNull event then
-//            this.TransportStatus <- TransportStatus.NotReceived
-//        else
-            match event.Type with
-            | HandlingType.Load -> this.TransportStatus <- TransportStatus.OnBoardVessel
-            | HandlingType.Unload
-            | HandlingType.Receive
-            | HandlingType.Customs -> this.TransportStatus <- TransportStatus.InPort
-            | HandlingType.Claim -> this.TransportStatus <- TransportStatus.Claimed
-            | _ -> raise <| ArgumentOutOfRangeException "event.Type"
+        // TODO: isNull event
+        //        if isNull event then
+        //            this.TransportStatus <- TransportStatus.NotReceived
+        //        else
+        match event.Type with
+        | HandlingType.Load -> this.TransportStatus <- TransportStatus.OnBoardVessel
+        | HandlingType.Unload
+        | HandlingType.Receive
+        | HandlingType.Customs -> this.TransportStatus <- TransportStatus.InPort
+        | HandlingType.Claim -> this.TransportStatus <- TransportStatus.Claimed
+        | _ -> raise <| ArgumentOutOfRangeException "event.Type"
 
     member private this._calcRoutingStatus (routeSpec: RouteSpecification) (itinerary: Itinerary) =
         if isNull itinerary then this.RoutingStatus <- RoutingStatus.NotRouted

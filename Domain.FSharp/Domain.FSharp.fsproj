@@ -5,10 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Shipping\Infra.fs" />
-        <Compile Include="Shipping\Voyage.fs" />
-        <Compile Include="Shipping\Location.fs" />
-        <Compile Include="Shipping\Cargo.fs" />
+        <Compile Include="Voyage.Types.fs" />
+        <Compile Include="Voyage.Functions.fs" />
+        <Compile Include="Location.Types.fs" />
+        <Compile Include="Location.Functions.fs" />
+        <Compile Include="Shipping.Types.fs" />
+        <Compile Include="Shipping.Functions.fs" />
     </ItemGroup>
 
 </Project>

@@ -1,10 +1,13 @@
-namespace Domain.Shipping.Location
+namespace Domain.Location
 
-open System
 open System
 open System.Text.RegularExpressions
 
 type UnLocode = private UnLocode of string
+
+type Location =
+    { UnLocode: UnLocode
+      Name: string }
 
 module UnLocode =
     let value (UnLocode str) = str
@@ -14,7 +17,3 @@ module UnLocode =
         if String.IsNullOrWhiteSpace value then Error "Unlocode cannot be empty or null."
         else if Regex.IsMatch(value, pattern) then Ok(UnLocode value)
         else Error "Provided value is not a valid UnLocode"
-
-type Location =
-    { UnLocode: UnLocode
-      Name: string }
