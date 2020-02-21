@@ -7,6 +7,10 @@ using Xunit;
 
 namespace Domain.Tests.Shipping.Cargo
 {
+    using Domain.Shipping;
+    using Location;
+    using Voyage;
+
     public class HandlingEventUnitTest
     {
         [Theory]

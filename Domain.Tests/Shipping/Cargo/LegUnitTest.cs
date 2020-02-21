@@ -1,12 +1,12 @@
-﻿using System;
-using AutoFixture.Xunit2;
-using Domain.Shipping.Cargo;
-using Domain.Shipping.Location;
-using Domain.Shipping.Voyage;
-using Xunit;
-
-namespace Domain.Tests.Shipping.Cargo
+﻿namespace Domain.Tests.Shipping.Cargo
 {
+    using System;
+    using AutoFixture.Xunit2;
+    using Xunit;
+    using Domain.Shipping;
+    using Location;
+    using Voyage;
+
     public class LegUnitTest
     {
         [Theory]

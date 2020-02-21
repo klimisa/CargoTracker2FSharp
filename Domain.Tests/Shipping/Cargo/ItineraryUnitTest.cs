@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoFixture;
-using AutoFixture.Kernel;
-using Domain.Shipping.Cargo;
-using Domain.Tests.Shipping.Cargo.Infra;
-using Xunit;
+﻿
 
 namespace Domain.Tests.Shipping.Cargo
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoFixture;
+    using Infra;
+    using Xunit;
+    using Domain.Shipping;
+
     public class ItineraryUnitTest
     {
         [Fact]

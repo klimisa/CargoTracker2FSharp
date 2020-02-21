@@ -1,14 +1,13 @@
-﻿using System;
-using AutoFixture.Xunit2;
-using Domain.Shipping.Cargo;
-using Domain.Tests.Shipping.Cargo.Infra;
-using FluentAssertions;
-using Xunit;
-using AutoFixture;
+﻿
 
 namespace Domain.Tests.Shipping.Cargo
 {
-    using System.Diagnostics.Tracing;
+    using System;
+    using AutoFixture.Xunit2;
+    using Infra;
+    using Xunit;
+    using AutoFixture;
+    using Domain.Shipping;
 
     public class CargoUnitTest
     {
@@ -18,7 +17,7 @@ namespace Domain.Tests.Shipping.Cargo
             RouteSpecification routeSpec
             )
         {
-            Assert.Throws<ArgumentNullException>(() => new Domain.Shipping.Cargo.Cargo(null, routeSpec));
+            Assert.Throws<ArgumentNullException>(() => new Cargo(null, routeSpec));
         }
 
         [Theory]
@@ -27,7 +26,7 @@ namespace Domain.Tests.Shipping.Cargo
             TrackingId trackingId
         )
         {
-            Assert.Throws<ArgumentNullException>(() => new Domain.Shipping.Cargo.Cargo(trackingId, null));
+            Assert.Throws<ArgumentNullException>(() => new Cargo(trackingId, null));
         }
 
         [Theory]
@@ -38,7 +37,7 @@ namespace Domain.Tests.Shipping.Cargo
         )
         {
             // ACT
-            var sut = new Domain.Shipping.Cargo.Cargo(trackingId, routeSpec);
+            var sut = new Cargo(trackingId, routeSpec);
 
             // ASSERT
             Assert.Equal(routeSpec, sut.RouteSpec);
@@ -50,7 +49,7 @@ namespace Domain.Tests.Shipping.Cargo
         [Theory]
         [AutoData]
         public void AssignToItinerary__NoItineraryGiven__ThrowsArgumentNullException(
-            Domain.Shipping.Cargo.Cargo sut
+            Cargo sut
         )
         {
             Assert.Throws<ArgumentNullException>(() => sut.AssignToItinerary(null));
@@ -59,7 +58,7 @@ namespace Domain.Tests.Shipping.Cargo
         [Theory]
         [AutoData]
         public void AssignToItinerary__EmitsAssignedToItineraryEvent_and_EmitsDeliveryStateChanged(
-            Domain.Shipping.Cargo.Cargo sut
+            Cargo sut
         )
         {
             // ARRANGE
@@ -79,7 +78,7 @@ namespace Domain.Tests.Shipping.Cargo
         [Theory]
         [AutoData]
         public void ChangeRoute__NoRouteSpecGiven__ThrowsArgumentNullException(
-                Domain.Shipping.Cargo.Cargo sut
+                Cargo sut
             )
         {
             Assert.Throws<ArgumentNullException>(() => sut.ChangeRoute(null));
@@ -88,7 +87,7 @@ namespace Domain.Tests.Shipping.Cargo
         [Theory]
         [AutoData]
         public void ChangeRoute__EmitsAssignedToItineraryEvent_and_EmitsDeliveryStateChangedEvent(
-            Domain.Shipping.Cargo.Cargo sut,
+            Cargo sut,
             RouteSpecification routeSpec
         )
         {
@@ -106,7 +105,7 @@ namespace Domain.Tests.Shipping.Cargo
         [Theory]
         [AutoData]
         public void RegisterHandlingEvent__EmitsHandlingEventRegisteredEvent_and_EmitsDeliveryStateChangedEvent(
-            Domain.Shipping.Cargo.Cargo sut,
+            Cargo sut,
             HandlingEvent @event
         )
         {

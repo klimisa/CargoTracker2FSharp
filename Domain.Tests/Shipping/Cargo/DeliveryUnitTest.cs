@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AutoFixture;
 using AutoFixture.Xunit2;
-using Domain.Shipping.Cargo;
-using Domain.Shipping.Location;
-using Domain.Shipping.Voyage;
 using Domain.Tests.Shipping.Cargo.Infra;
-using Moq;
 using Xunit;
 
 namespace Domain.Tests.Shipping.Cargo
 {
+    using Domain.Shipping;
+    using Voyage;
+
     public class DeliveryUnitTest   
     {
         [Fact]

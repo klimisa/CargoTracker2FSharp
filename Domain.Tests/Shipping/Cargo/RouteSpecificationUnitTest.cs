@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoFixture;
-using AutoFixture.Xunit2;
-using Domain.Shipping.Cargo;
-using Domain.Shipping.Location;
-using Domain.Tests.Shipping.Cargo.Infra;
-using Moq;
-using Xunit;
-using RouteSpecification = Domain.Shipping.Cargo.RouteSpecification;
-
-namespace Domain.Tests.Shipping.Cargo
+﻿namespace Domain.Tests.Shipping.Cargo
 {
+    using System;
+    using System.Collections.Generic;
+    using AutoFixture;
+    using AutoFixture.Xunit2;
+    using Domain.Shipping;
+    using Infra;
+    using Location;
+    using Xunit;
+
     public class RouteSpecificationUnitTest
     {
         [Theory]
         [AutoData]
         public void Ctor__NoOriginGiven__ThrowsArgumentNullException(
-                UnLocode location
-            )
+            UnLocode location
+        )
         {
             Assert.Throws<ArgumentNullException>(() => new RouteSpecification(null, location, DateTime.UtcNow));
         }
@@ -26,8 +23,8 @@ namespace Domain.Tests.Shipping.Cargo
         [Theory]
         [AutoData]
         public void Ctor__NoDestinationGiven__ThrowsArgumentNullException(
-                UnLocode location
-            )
+            UnLocode location
+        )
         {
             Assert.Throws<ArgumentNullException>(() => new RouteSpecification(location, null, DateTime.UtcNow));
         }
@@ -35,8 +32,8 @@ namespace Domain.Tests.Shipping.Cargo
         [Theory]
         [AutoData]
         public void Ctor__SameOriginAndDestinationGiven__ThrowsInvalidOperationException(
-                UnLocode location
-            )
+            UnLocode location
+        )
         {
             Assert.Throws<InvalidOperationException>(() => new RouteSpecification(location, location, DateTime.UtcNow));
         }
@@ -45,7 +42,7 @@ namespace Domain.Tests.Shipping.Cargo
         [AutoData]
         public void IsSatisfiedBy__OriginGivenIsDifferentThanItineraryFirstLoadingLocation__ReturnsFalse(
             RouteSpecification sut
-            )
+        )
         {
             // ARRANGE
             // NOTE: relying on A/F to create different locations as the RouteSpecification's Origin and the Itinerary's First Loading Location
@@ -62,13 +59,13 @@ namespace Domain.Tests.Shipping.Cargo
         [AutoData]
         public void IsSatisfiedBy__DestinationGivenIsDifferentThanItineraryLastUnLoadingLocation__ReturnFalse(
             RouteSpecification sut
-            )
+        )
         {
             // ARRANGE
             var itineraryFixture = new Fixture();
             itineraryFixture.Customize(new DefaultLegCustomization());
             // RouteSpecification's Origin given is the same as Itinerary's First Loading Location
-            itineraryFixture.Customizations.Add(new LegCollectionBuilder( new [] { sut.Origin } ) );
+            itineraryFixture.Customizations.Add(new LegCollectionBuilder(new[] {sut.Origin}));
             var itinerary = itineraryFixture.Create<Itinerary>();
 
             // ACT
@@ -92,7 +89,8 @@ namespace Domain.Tests.Shipping.Cargo
 
             // RouteSpecification's Origin given is the same as Itinerary's First Loading Location
             // RouteSpecification's Destination given is the same as Itinerary's Last UnLoading Location
-            itineraryFixture.Customizations.Add(new LegCollectionBuilder(new[] { sut.Origin, null, null, sut.Destination }));
+            itineraryFixture.Customizations.Add(
+                new LegCollectionBuilder(new[] {sut.Origin, null, null, sut.Destination}));
             var legs = new List<Leg>
             {
                 itineraryFixture.Create<Leg>(),
