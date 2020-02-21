@@ -5,7 +5,8 @@ open System
 open Domain.Location
 open Domain.Voyage
 
-type TrackingId = TrackingId of Guid
+type Undefined = exn
+type TrackingId = Undefined
 
 type HandlingType =
     | Load = 0
@@ -45,3 +46,49 @@ type HandlingActivity =
     { Location: UnLocode
       Type: HandlingType
       Voyage: VoyageNumber }
+
+type Cargo = {
+    Id: TrackingId
+    Origin: Location
+    Destination: Location
+    ArrivalDeadline: DateTime
+}
+
+// Location
+type UnvalidatedLocation = UnvalidatedLocation of string
+type ValidatedLocation = private ValidatedLocation of Location
+type LocationValidationService = UnvalidatedLocation -> ValidatedLocation option
+
+// Arrival Deadline
+type UnvalidatedArrivalDeadline = UnvalidatedArrivalDeadline of string
+type ValidatedArrivalDeadline = private ValidatedArrivalDeadline of DateTime
+type ArrivalDeadlineValidationService = UnvalidatedArrivalDeadline -> ValidatedArrivalDeadline option
+
+type UnvalidatedBookCargo = {
+    UnvalidatedOrigin: UnvalidatedLocation
+    UnvalidatedDestination: UnvalidatedLocation
+    UnvalidatedArrivalDeadline: UnvalidatedArrivalDeadline
+}
+
+type ValidatedBookCargo = {
+    ValidatedOrigin: ValidatedLocation
+    ValidatedDestination: ValidatedLocation
+    ValidatedArrivalDeadline: ValidatedArrivalDeadline
+}
+
+type CargoBooked = {
+    Id: TrackingId
+    Origin: Location
+    Destination: Location
+    ArrivalDeadline: DateTime
+}
+
+type ValidationError = {
+    FieldName: string
+    ErrorDescription: string
+}
+
+type BookCargoError = 
+   | ValidationError of ValidationError list
+
+type BookCargo = UnvalidatedBookCargo -> Result<CargoBooked, BookCargoError>
