@@ -1,5 +1,7 @@
 ﻿
 
+using Domain.Shipping.CargoBck;
+
 namespace Domain.Tests.Shipping.Cargo
 {
     using System;

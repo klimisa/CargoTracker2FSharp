@@ -8,44 +8,52 @@ open Domain.Voyage
 type Undefined = exn
 type TrackingId = Undefined
 
-type HandlingType =
-    | Load = 0
-    | Unload = 1
-    | Receive = 2
-    | Claim = 3
-    | Customs = 4
-
 type RoutingStatus =
     | NotRouted = 0
     | Routed = 1
     | MisRouted = 2
+    
+// ----------------------
+// Input Data
+// ----------------------
+type UnvalidatedLocation = UnvalidatedLocation of string
+type UnvalidatedArrivalDeadline = UnvalidatedArrivalDeadline of string
+type UnvalidatedBookCargo = {
+    TrackingId: string
+    UnvalidatedOrigin: UnvalidatedLocation
+    UnvalidatedDestination: UnvalidatedLocation
+    UnvalidatedArrivalDeadline: UnvalidatedArrivalDeadline
+}
 
-type TransportStatus =
-    | NotReceived = 0
-    | InPort = 1
-    | OnBoardVessel = 2
-    | Claimed = 3
-    | Unknown = 4
+// ----------------------
+// Input Command
+// ----------------------
+type Command<'data> = {
+    Data: 'data
+    Timestamp: DateTime
+}
 
-type Leg =
-    { Voyage: VoyageNumber
-      LoadLocation: UnLocode
-      UnloadLocation: UnLocode
-      LoadTime: DateTime
-      UnloadTime: DateTime }
+// I like the specific of `Book Cargo Form`
+//type BookCargoCommand = {
+//    BookCargoForm: UnvalidatedBookCargo
+//    Timestamp: DateTime
+//    UserId: string
+//}
 
-type HandlingEvent =
-    { TrackingId: TrackingId
-      Location: UnLocode
-      Type: HandlingType
-      Voyage: VoyageNumber
-      Completed: DateTime
-      Registered: DateTime }
+type BookCargoCommand = Command<UnvalidatedBookCargo>
 
-type HandlingActivity =
-    { Location: UnLocode
-      Type: HandlingType
-      Voyage: VoyageNumber }
+// ----------------------
+// Public API
+// ----------------------
+
+// Success output of Booking Cargo
+type BookedCargo = {
+    TrackingId: TrackingId
+    Origin: ValidatedLocation
+    Destination: ValidatedLocation
+    ArrivalDeadline: ValidatedArrivalDeadline
+}
+
 
 type Cargo = {
     Id: TrackingId
@@ -55,26 +63,26 @@ type Cargo = {
 }
 
 // Location
-type UnvalidatedLocation = UnvalidatedLocation of string
+
 type ValidatedLocation = private ValidatedLocation of Location
 type LocationValidationService = UnvalidatedLocation -> ValidatedLocation option
 
 // Arrival Deadline
-type UnvalidatedArrivalDeadline = UnvalidatedArrivalDeadline of string
+
 type ValidatedArrivalDeadline = private ValidatedArrivalDeadline of DateTime
 type ArrivalDeadlineValidationService = UnvalidatedArrivalDeadline -> ValidatedArrivalDeadline option
 
-type UnvalidatedBookCargo = {
-    UnvalidatedOrigin: UnvalidatedLocation
-    UnvalidatedDestination: UnvalidatedLocation
-    UnvalidatedArrivalDeadline: UnvalidatedArrivalDeadline
-}
+
 
 type ValidatedBookCargo = {
+    TrackingId: TrackingId
     ValidatedOrigin: ValidatedLocation
     ValidatedDestination: ValidatedLocation
     ValidatedArrivalDeadline: ValidatedArrivalDeadline
 }
+
+
+
 
 type CargoBooked = {
     Id: TrackingId
@@ -92,3 +100,5 @@ type BookCargoError =
    | ValidationError of ValidationError list
 
 type BookCargo = UnvalidatedBookCargo -> Result<CargoBooked, BookCargoError>
+type ValidateBookCargo = UnvalidatedLocation -> Result<ValidatedBookCargo, ValidationError>
+type Booking = ValidatedBookCargo -> BookedCargo
